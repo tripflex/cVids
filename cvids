@@ -25,8 +25,11 @@ if [ "$#" -lt 3 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] || [[ $1 == -* ]]; t
  	echo "Usage: $0 <path> <oldext> <newext>" >&2
  	exit
 fi
+path=$1
+oldext=$2
+newext=$3
 
-for i in *.$oldext;
+for i in "$path/*.$oldext";
   do name=`echo $i | cut -d'.' -f1`;
   echo $name;
   ffmpeg -i "$i" "$name.$newext";
