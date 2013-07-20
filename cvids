@@ -25,12 +25,14 @@ if [ "$#" -lt 3 ] || [ "$1" = "-h" ] || [ "$1" = "--help" ] || [[ $1 == -* ]]; t
  	echo "Usage: $0 <path> <oldext> <newext>" >&2
  	exit
 fi
-path=$1
+path=${1%/}
 oldext=$2
 newext=$3
 
-for i in "$path/*.$oldext";
-  do name=`echo $i | cut -d'.' -f1`;
-  echo $name;
-  ffmpeg -i "$i" "$name.$newext";
+for i in $path/*.$oldext
+  do name=`echo $i | cut -d'.' -f1`
+  echo "Processing $name"
+  ffmpeg -i "$i" -vcodec copy -acodec copy "$name.$newext"
+  echo "Removing old file $name.$oldext"
+  rm -rf "$name.$oldext"
 done
